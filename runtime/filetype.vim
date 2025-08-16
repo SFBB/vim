@@ -1,7 +1,7 @@
 " Vim support file to detect file types
 "
 " Maintainer:		The Vim Project <https://github.com/vim/vim>
-" Last Change:		2025 Jun 03
+" Last Change:		2025 Aug 10
 " Former Maintainer:	Bram Moolenaar <Bram@vim.org>
 
 " Listen very carefully, I will say this only once
@@ -308,6 +308,12 @@ au BufNewFile,BufRead *.bb,*.bbappend,*.bbclass,*/build/conf/*.conf,*/meta{-*,}/
 
 " Blkid cache file
 au BufNewFile,BufRead */etc/blkid.tab,*/etc/blkid.tab.old   setf xml
+
+" Brighterscript
+au BufNewFile,BufRead *.bs			setf brighterscript
+
+" Brightscript
+au BufNewFile,BufRead *.brs			setf brightscript
 
 " BSDL
 au BufNewFile,BufRead *.bsd,*.bsdl			setf bsdl
@@ -684,11 +690,16 @@ au BufNewFile,BufRead *.dfy			setf dafny
 " Dart
 au BufRead,BufNewfile *.dart,*.drt		setf dart
 
+" Debian autopkgtest
+au BufNewFile,BufRead */debian/tests/control	setf autopkgtest
+
 " Debian Control
 au BufNewFile,BufRead */{debian,DEBIAN}/control		setf debcontrol
 au BufNewFile,BufRead control
 	\  if getline(1) =~ '^Source:\|^Package:'
 	\|   setf debcontrol
+	\| elseif getline(1) =~ '^Tests:\|^Test-Command:'
+	\|   setf autopkgtest
 	\| endif
 
 " Debian Copyright
@@ -878,6 +889,9 @@ autocmd BufRead,BufNewFile *.fnl,{,.}fennelrc	setf fennel
 " Fetchmail RC file
 au BufNewFile,BufRead .fetchmailrc		setf fetchmail
 
+" FGA
+au BufNewFile,BufRead *.fga			setf fga
+
 " FIRRTL - Flexible Internal Representation for RTL
 au BufNewFile,BufRead *.fir			setf firrtl
 
@@ -886,6 +900,9 @@ au BufNewFile,BufRead *.fish			setf fish
 
 " Flatpak config
 au BufNewFile,BufRead */flatpak/repo/config	setf dosini
+
+" Flix
+au BufNewFile,BufRead *.flix			setf flix
 
 " Focus Executable
 au BufNewFile,BufRead *.fex,*.focexec		setf focexec
@@ -1090,6 +1107,9 @@ au BufNewFile,BufRead *.persistentmodels	setf haskellpersistent
 " Haste
 au BufNewFile,BufRead *.ht			setf haste
 au BufNewFile,BufRead *.htpp			setf hastepreproc
+
+" Haxe
+au BufNewFile,BufRead *.hx			setf haxe
 
 " HCL
 au BufRead,BufNewFile *.hcl			setf hcl
@@ -1300,7 +1320,7 @@ au BufNewFile,BufRead *.ipynb,*.jupyterlab-settings	setf json
 au BufNewFile,BufRead *.sublime-project,*.sublime-settings,*.sublime-workspace	setf json
 
 " Other files that look like json
-au BufNewFile,BufRead .prettierrc,.firebaserc,.stylelintrc,.lintstagedrc,flake.lock,deno.lock,.swcrc	setf json
+au BufNewFile,BufRead .prettierrc,.firebaserc,.stylelintrc,.lintstagedrc,flake.lock,deno.lock,.swcrc,composer.lock,symfony.lock	setf json
 
 " JSONC (JSON with comments)
 au BufNewFile,BufRead *.jsonc,.babelrc,.eslintrc,.jsfmtrc,bun.lock	setf jsonc
@@ -1420,7 +1440,7 @@ au BufNewFile,BufRead */etc/sensors.conf,*/etc/sensors3.conf	setf sensors
 " LFTP
 au BufNewFile,BufRead lftp.conf,.lftprc,*lftp/rc	setf lftp
 
-" Lifelines (or Lex for C++!)
+" Lifelines, LLVM, or Lex for C++
 au BufNewFile,BufRead *.ll			call dist#ft#FTll()
 
 " Lilo: Linux loader
@@ -1759,6 +1779,9 @@ au BufNewFile,BufRead *.nt			setf ntriples
 " Nu
 au BufNewFile,BufRead *.nu		setf nu
 
+" Numbat
+au BufNewFile,BufRead *.nbt		setf numbat
+
 " Oblivion Language and Oblivion Script Extender
 au BufNewFile,BufRead *.obl,*.obse,*.oblivion,*.obscript  setf obse
 
@@ -1922,6 +1945,7 @@ au BufNewFile,BufRead .pinerc,pinerc,.pinercex,pinercex		setf pine
 au BufNewFile,BufRead *.pip			setf requirements
 au BufNewFile,BufRead requirements.txt		setf requirements
 au BufNewFile,BufRead *-requirements.txt	setf requirements
+au BufNewFile,BufRead requirements-*.txt	setf requirements
 au BufNewFile,BufRead constraints.txt		setf requirements
 au BufNewFile,BufRead requirements.in		setf requirements
 au BufNewFile,BufRead requirements/*.txt	setf requirements
@@ -1933,6 +1957,9 @@ au BufNewFile,BufRead Pipfile.lock		setf json
 
 " Pixi lock
 au BufNewFile,BufRead pixi.lock			setf yaml
+
+" Pkl
+au BufNewFile,BufRead *.pkl			setf pkl
 
 " PL/1, PL/I
 au BufNewFile,BufRead *.pli,*.pl1		setf pli
@@ -2079,6 +2106,9 @@ au BufRead,BufNewFile qmldir			setf qmldir
 
 " Quarto
 au BufRead,BufNewFile *.qmd			setf quarto
+
+" QuickBms
+au BufRead,BufNewFile *.bms			setf quickbms
 
 " Racket (formerly detected as "scheme")
 au BufNewFile,BufRead *.rkt,*.rktd,*.rktl	setf racket
@@ -2852,6 +2882,9 @@ au BufNewFile,BufRead *.vroom			setf vroom
 
 " Vue.js Single File Component
 au BufNewFile,BufRead *.vue			setf vue
+
+" Waybar config
+au BufNewFile,BufRead */waybar/config		setf jsonc
 
 " WebAssembly
 au BufNewFile,BufRead *.wat,*.wast		setf wat

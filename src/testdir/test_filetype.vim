@@ -125,6 +125,7 @@ def s:GetFilenameChecks(): dict<list<string>>
     autohotkey: ['file.ahk'],
     autoit: ['file.au3'],
     automake: ['GNUmakefile.am', 'makefile.am', 'Makefile.am'],
+    autopkgtest: ['/debian/tests/control', 'any/debian/tests/control'],
     ave: ['file.ave'],
     awk: ['file.awk', 'file.gawk'],
     b: ['file.mch', 'file.ref', 'file.imp'],
@@ -142,6 +143,8 @@ def s:GetFilenameChecks(): dict<list<string>>
     blank: ['file.bl'],
     blueprint: ['file.blp'],
     bp: ['Android.bp'],
+    brighterscript: ['file.bs'],
+    brightscript: ['file.brs'],
     bsdl: ['file.bsd', 'file.bsdl'],
     bst: ['file.bst'],
     bzl: ['file.bazel', 'file.bzl', 'WORKSPACE', 'WORKSPACE.bzlmod'],
@@ -282,9 +285,11 @@ def s:GetFilenameChecks(): dict<list<string>>
     faust: ['file.dsp', 'file.lib'],
     fennel: ['file.fnl', '.fennelrc', 'fennelrc'],
     fetchmail: ['.fetchmailrc'],
+    fga: ['file.fga'],
     fgl: ['file.4gl', 'file.4gh', 'file.m4gl'],
     firrtl: ['file.fir'],
     fish: ['file.fish'],
+    flix: ['file.flix'],
     focexec: ['file.fex', 'file.focexec'],
     form: ['file.frm'],
     forth: ['file.ft', 'file.fth', 'file.4th'],
@@ -345,6 +350,7 @@ def s:GetFilenameChecks(): dict<list<string>>
     haskellpersistent: ['file.persistentmodels'],
     haste: ['file.ht'],
     hastepreproc: ['file.htpp'],
+    haxe: ['file.hx'],
     hb: ['file.hb'],
     hcl: ['file.hcl'],
     heex: ['file.heex'],
@@ -398,9 +404,9 @@ def s:GetFilenameChecks(): dict<list<string>>
     jq: ['file.jq'],
     json: ['file.json', 'file.jsonp', 'file.json-patch', 'file.geojson', 'file.webmanifest', 'Pipfile.lock', 'file.ipynb', 'file.jupyterlab-settings',
     '.prettierrc', '.firebaserc', '.stylelintrc', '.lintstagedrc', 'file.slnf', 'file.sublime-project', 'file.sublime-settings', 'file.sublime-workspace',
-    'file.bd', 'file.bda', 'file.xci', 'flake.lock', 'pack.mcmeta', 'deno.lock', '.swcrc'],
+    'file.bd', 'file.bda', 'file.xci', 'flake.lock', 'pack.mcmeta', 'deno.lock', '.swcrc', 'composer.lock', 'symfony.lock'],
     json5: ['file.json5'],
-    jsonc: ['file.jsonc', '.babelrc', '.eslintrc', '.jsfmtrc', '.jshintrc', '.jscsrc', '.vsconfig', '.hintrc', '.swrc', 'jsconfig.json', 'tsconfig.json', 'tsconfig.test.json', 'tsconfig-test.json', '.luaurc', 'bun.lock', expand("$HOME/.config/VSCodium/User/settings.json")],
+    jsonc: ['file.jsonc', '.babelrc', '.eslintrc', '.jsfmtrc', '.jshintrc', '.jscsrc', '.vsconfig', '.hintrc', '.swrc', 'jsconfig.json', 'tsconfig.json', 'tsconfig.test.json', 'tsconfig-test.json', '.luaurc', 'bun.lock', expand("$HOME/.config/VSCodium/User/settings.json"), '/home/user/.config/waybar/config' ],
     jsonl: ['file.jsonl'],
     jsonnet: ['file.jsonnet', 'file.libsonnet'],
     jsp: ['file.jsp'],
@@ -563,6 +569,7 @@ def s:GetFilenameChecks(): dict<list<string>>
     nsis: ['file.nsi', 'file.nsh'],
     ntriples: ['file.nt'],
     nu: ['file.nu'],
+    numbat: ['file.nbt'],
     obj: ['file.obj'],
     objdump: ['file.objdump', 'file.cppobjdump'],
     obse: ['file.obl', 'file.obse', 'file.oblivion', 'file.obscript'],
@@ -598,6 +605,7 @@ def s:GetFilenameChecks(): dict<list<string>>
     pilrc: ['file.rcp'],
     pine: ['.pinerc', 'pinerc', '.pinercex', 'pinercex'],
     pinfo: ['/etc/pinforc', '/.pinforc', 'any/.pinforc', 'any/etc/pinforc'],
+    pkl: ['file.pkl'],
     pli: ['file.pli', 'file.pl1'],
     plm: ['file.plm', 'file.p36', 'file.pac'],
     plp: ['file.plp'],
@@ -639,6 +647,7 @@ def s:GetFilenameChecks(): dict<list<string>>
     qmldir: ['qmldir'],
     quake: ['anybaseq2/file.cfg', 'anyid1/file.cfg', 'quake3/file.cfg', 'baseq2/file.cfg', 'id1/file.cfg', 'quake1/file.cfg', 'some-baseq2/file.cfg', 'some-id1/file.cfg', 'some-quake1/file.cfg'],
     quarto: ['file.qmd'],
+    quickbms: ['file.bms'],
     r: ['file.r', '.Rhistory', '.Rprofile', 'Rprofile', 'Rprofile.site'],
     racket: ['file.rkt', 'file.rktd', 'file.rktl'],
     radiance: ['file.rad', 'file.mat'],
@@ -653,7 +662,7 @@ def s:GetFilenameChecks(): dict<list<string>>
     readline: ['.inputrc', 'inputrc'],
     rego: ['file.rego'],
     remind: ['.reminders', 'file.remind', 'file.rem', '.reminders-file'],
-    requirements: ['file.pip', 'requirements.txt', 'dev-requirements.txt', 'constraints.txt', 'requirements.in', 'requirements/dev.txt', 'requires/dev.txt'],
+    requirements: ['file.pip', 'requirements.txt', 'dev-requirements.txt', 'requirements-dev.txt', 'constraints.txt', 'requirements.in', 'requirements/dev.txt', 'requires/dev.txt'],
     rescript: ['file.res', 'file.resi'],
     resolv: ['resolv.conf'],
     reva: ['file.frt'],
@@ -2634,6 +2643,12 @@ func Test_ll_file()
   call assert_equal('llvm', &filetype)
   bwipe!
 
+  " lex (C++)
+  call writefile(['%{', '#include <iostream>', '%}'], 'Xfile.ll', 'D')
+  split Xfile.ll
+  call assert_equal('lex', &filetype)
+  bwipe!
+
   " lifelines
   call writefile(['proc main() {}'], 'Xfile.ll', 'D')
   split Xfile.ll
@@ -3009,6 +3024,39 @@ func Test_org_file()
   filetype off
 endfunc
 
+func Test_info_file()
+  filetype on
+
+  call writefile(['File: coreutils.info,  Node: Top,  Next: Introduction,  Up: (dir)'], 'Xfile', 'D')
+  split Xfile
+  call assert_equal('info', &filetype)
+  bwipe!
+
+  filetype off
+endfunc
+
+func Test_mail_file()
+  filetype on
+
+  call writefile(['Return-path: <lgc@debian.home.arpa>'], 'Xfile', 'D')
+  split Xfile
+  call assert_equal('mail', &filetype)
+  bwipe!
+
+  filetype off
+endfunc
+
+func Test_terminfo_file()
+  filetype on
+
+  call writefile(['#	Reconstructed via infocmp from file: /etc/terminfo/x/xterm'], 'Xfile', 'D')
+  split Xfile
+  call assert_equal('terminfo', &filetype)
+  bwipe!
+
+  filetype off
+endfunc
+
 " Filetypes detected from names of existing files
 func Test_pacmanlog()
   filetype on
@@ -3018,6 +3066,17 @@ func Test_pacmanlog()
     call assert_equal('pacmanlog', &filetype, 'for text: ' .. string(fname))
     bwipe!
   endfor
+  filetype off
+endfunc
+
+func Test_diff_format()
+  filetype on
+
+  call writefile(['0d555557  1 (John John   2025-01-01 00:00:00 +0000  1) foo'], 'Xdiff', 'D')
+  split Xdiff
+  call assert_true(empty(&filetype))
+  bwipe!
+
   filetype off
 endfunc
 

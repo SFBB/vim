@@ -2,9 +2,7 @@
 " Most of this was formerly in test49.vim (developed by Servatius Brandt
 " <Servatius.Brandt@fujitsu-siemens.com>)
 
-source check.vim
-source shared.vim
-source script_util.vim
+source util/script_util.vim
 
 "-------------------------------------------------------------------------------
 " Test environment							    {{{1
@@ -25,7 +23,7 @@ com! -nargs=1	     Xout     call Xout(<args>)
 func RunInNewVim(test, verify)
   let init =<< trim END
     set cpo-=C            " support line-continuation in sourced script
-    source script_util.vim
+    source util/script_util.vim
     XpathINIT
     XloopINIT
   END
@@ -6890,6 +6888,52 @@ func Test_script_lines()
     catch
 	call assert_exception('Vim(function):E1145: Missing heredoc end marker: .')
     endtry
+
+    " More test for :append, :change, :insert
+    let cmds = ["append", "change", "insert"]
+    let suffixes = ["", "!", "|", "|xyz", " "]
+
+    for c in cmds
+      " Single character (with some accepted trailing characters)
+      for s in suffixes
+        let cmd = c[:0] .. s
+        let line = ["func LinesCheck()", cmd, "", "endfunc", "call LinesCheck()"]
+        call writefile(line, 'Xfunc', 'D')
+        call assert_fails('source Xfunc', 'E1145: Missing heredoc end marker: .', $'"{cmd}"')
+      endfor
+
+      " Unnecessary arguments
+      let cmd = c[:2] .. " end"
+      let line[1] = cmd
+      call writefile(line, 'Xfunc', 'D')
+      call assert_fails('source Xfunc', 'E488: Trailing characters: end:', $'"{cmd}"')
+
+      " Extra characters at the end (i.e., other commands)
+      let cmd = c .. "x"
+      let line[1] = cmd
+      call writefile(line, 'Xfunc', 'D')
+      call assert_fails('source Xfunc', 'E492: Not an editor command:', $'"{cmd}"')
+    endfor
+
+    let line =<< trim END
+    func AppendCheck()
+      apple
+    endfunc
+    call AppendCheck()
+    END
+    call writefile(line, 'Xfunc', 'D')
+    call assert_fails('source Xfunc', 'E492: Not an editor command:   apple')
+
+    let line =<< trim END
+    func AppendCheck()
+      command! apple :echo "hello apple"
+      apple
+    endfunc
+    call AppendCheck()
+    END
+    call writefile(line, 'Xfunc', 'D')
+    call assert_fails('source Xfunc', 'E183: User defined commands must start with an uppercase letter')
+
 endfunc
 
 "-------------------------------------------------------------------------------

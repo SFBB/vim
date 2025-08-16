@@ -342,7 +342,11 @@ MSVCRT_NAME = vcruntime$(MSVCRT_VER)
 
 ### Set the default $(WINVER) to make it work with Windows 7
 !ifndef WINVER
+! if "$(CPU)" == "ARM64"
+WINVER = 0x0A00
+! else
 WINVER = 0x0601
+! endif
 !endif
 
 # Use multiprocess build
@@ -571,7 +575,8 @@ CPUNR = sse2
 !  error *** ERROR Unknown target architecture "$(CPUNR)". Make aborted.
 ! endif
 !elseif "$(CPU)" == "ARM64"
-# TODO: Validate CPUNR.
+# TODO: Validate CPUNR depending on the VS version.
+CPUNR = armv8.0
 !endif
 
 # Convert processor ID to MVC-compatible number
@@ -727,6 +732,7 @@ OBJ = \
 	$(OUTDIR)\findfile.obj \
 	$(OUTDIR)\float.obj \
 	$(OUTDIR)\fold.obj \
+	$(OUTDIR)\fuzzy.obj \
 	$(OUTDIR)\getchar.obj \
 	$(OUTDIR)\gc.obj \
 	$(OUTDIR)\gui_xim.obj \
@@ -798,6 +804,7 @@ OBJ = \
 	$(OUTDIR)\vim9compile.obj \
 	$(OUTDIR)\vim9execute.obj \
 	$(OUTDIR)\vim9expr.obj \
+	$(OUTDIR)\vim9generics.obj \
 	$(OUTDIR)\vim9instr.obj \
 	$(OUTDIR)\vim9script.obj \
 	$(OUTDIR)\vim9type.obj \
@@ -1610,6 +1617,8 @@ $(OUTDIR)/float.obj:	$(OUTDIR) float.c  $(INCL)
 
 $(OUTDIR)/fold.obj:	$(OUTDIR) fold.c  $(INCL)
 
+$(OUTDIR)/fuzzy.obj:	$(OUTDIR) fuzzy.c  $(INCL)
+
 $(OUTDIR)/getchar.obj:	$(OUTDIR) getchar.c  $(INCL)
 
 $(OUTDIR)/gc.obj:	$(OUTDIR) gc.c  $(INCL)
@@ -1819,6 +1828,8 @@ $(OUTDIR)/vim9execute.obj:	$(OUTDIR) vim9execute.c  $(INCL) vim9.h
 
 $(OUTDIR)/vim9expr.obj:	$(OUTDIR) vim9expr.c  $(INCL) vim9.h
 
+$(OUTDIR)/vim9generics.obj:	$(OUTDIR) vim9generics.c  $(INCL) vim9.h
+
 $(OUTDIR)/vim9instr.obj:	$(OUTDIR) vim9instr.c  $(INCL) vim9.h
 
 $(OUTDIR)/vim9script.obj:	$(OUTDIR) vim9script.c  $(INCL) vim9.h
@@ -1953,6 +1964,7 @@ proto.h: \
 	proto/filepath.pro \
 	proto/findfile.pro \
 	proto/float.pro \
+	proto/fuzzy.pro \
 	proto/getchar.pro \
 	proto/gc.pro \
 	proto/gui_xim.pro \
@@ -2023,6 +2035,7 @@ proto.h: \
 	proto/vim9compile.pro \
 	proto/vim9execute.pro \
 	proto/vim9expr.pro \
+	proto/vim9generics.pro \
 	proto/vim9instr.pro \
 	proto/vim9script.pro \
 	proto/vim9type.pro \

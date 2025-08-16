@@ -4478,7 +4478,7 @@ nv_brackets(cmdarg_T *cap)
 			    SAFE_islower(cap->nchar) ? ACTION_SHOW : ACTION_GOTO,
 		cap->cmdchar == ']' ? curwin->w_cursor.lnum + 1 : (linenr_T)1,
 		(linenr_T)MAXLNUM,
-		FALSE);
+		FALSE, FALSE);
 	    vim_free(ptr);
 	    curwin->w_set_curswant = TRUE;
 	}
@@ -5675,9 +5675,6 @@ nv_gv_cmd(cmdarg_T *cap)
 {
     pos_T	tpos;
     int		i;
-
-    if (checkclearop(cap->oap))
-	return;
 
     if (curbuf->b_visual.vi_start.lnum == 0
 	    || curbuf->b_visual.vi_start.lnum > curbuf->b_ml.ml_line_count
