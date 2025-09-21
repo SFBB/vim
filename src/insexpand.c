@@ -2375,7 +2375,7 @@ ins_compl_preinsert_effect(void)
  * Returns TRUE if autocompletion is active.
  */
     int
-ins_compl_has_autocomplete(void)
+ins_compl_autocomplete_enabled(void)
 {
     return compl_autocomplete;
 }
@@ -2450,6 +2450,16 @@ ins_compl_need_restart(void)
 }
 
 /*
+ * Return TRUE if 'autocomplete' option is set
+ */
+    int
+ins_compl_has_autocomplete(void)
+{
+    // Use buffer-local setting if defined (>= 0), otherwise use global
+    return curbuf->b_p_ac >= 0 ? curbuf->b_p_ac : p_ac;
+}
+
+/*
  * Called after changing "compl_leader".
  * Show the popup menu with a different set of matches.
  * May also search for matches again if the previous search was interrupted.
@@ -2498,8 +2508,7 @@ ins_compl_new_leader(void)
 	save_w_wrow = curwin->w_wrow;
 	save_w_leftcol = curwin->w_leftcol;
 	compl_restarting = TRUE;
-	if (p_ac)
-	    compl_autocomplete = TRUE;
+	compl_autocomplete = ins_compl_has_autocomplete();
 	if (ins_complete(Ctrl_N, FALSE) == FAIL)
 	    compl_cont_status = 0;
 	compl_restarting = FALSE;
@@ -5005,8 +5014,9 @@ get_next_default_completion(ins_compl_next_state_T *st, pos_T *start_pos)
     int		looped_around = FALSE;
     char_u	*ptr = NULL;
     int		len = 0;
-    int		in_fuzzy_collect = (cfc_has_mode() && compl_length > 0)
-	|| ((get_cot_flags() & COT_FUZZY) && compl_autocomplete);
+    int		in_fuzzy_collect = !compl_status_adding()
+		&& ((cfc_has_mode() && compl_length > 0)
+		    || ((get_cot_flags() & COT_FUZZY) && compl_autocomplete));
     char_u	*leader = ins_compl_leader();
     int		score = FUZZY_SCORE_NONE;
     int		in_curbuf = st->ins_buf == curbuf;
@@ -7113,11 +7123,6 @@ ins_compl_start(void)
 	    compl_length = 0;
 	    compl_col = curwin->w_cursor.col;
 	    compl_lnum = curwin->w_cursor.lnum;
-	}
-	else if (ctrl_x_mode_normal() && cfc_has_mode())
-	{
-	    compl_startpos = curwin->w_cursor;
-	    compl_cont_status &= CONT_S_IPOS;
 	}
     }
     else
