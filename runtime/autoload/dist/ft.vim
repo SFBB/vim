@@ -3,7 +3,7 @@ vim9script
 # Vim functions for file type detection
 #
 # Maintainer:		The Vim Project <https://github.com/vim/vim>
-# Last Change:		2025 Nov 28
+# Last Change:		2025 Nov 30
 # Former Maintainer:	Bram Moolenaar <Bram@vim.org>
 
 # These functions are moved here from runtime/filetype.vim to make startup
@@ -2226,6 +2226,8 @@ const ft_from_ext = {
   "ldg": "ledger",
   "ledger": "ledger",
   "journal": "ledger",
+  # Leex
+  "xrl": "leex",
   # Leo
   "leo": "leo",
   # Less
@@ -3072,6 +3074,8 @@ const ft_from_name = {
   ".editorconfig": "editorconfig",
   # Elinks configuration
   "elinks.conf": "elinks",
+  # Erlang
+  "rebar.config": "erlang",
   # Exim
   "exim.conf": "exim",
   # Exports
